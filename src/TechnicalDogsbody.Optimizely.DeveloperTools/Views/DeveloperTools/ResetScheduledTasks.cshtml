@@ -1,0 +1,56 @@
+﻿@using Microsoft.AspNetCore.Http.Extensions
+@model (bool, IEnumerable<(Guid, string, bool)>)
+
+@{
+    Layout = "_ShellLayout";
+}
+
+<div class="epi-contentArea">
+    <h1>Reset Stuck Scheduled Tasks</h1>
+    <h4>This will stop any stuck scheduled tasks (note: this only updates the database, it doesn't kill any processes).</h4>
+
+
+    @if (Model.Item1)
+    {
+            <br />
+
+        <br />
+            <h5>Jobs have been reset</h5>
+    }
+
+    <br /><br />
+    <form method="get">
+
+        <button type="submit" name="reset" value="true">Stop Stuck Scheduled Tasks</button>
+
+        <br/><br/>
+        <table>
+            <thead>
+            <tr>
+                <td>ID</td>
+                <td>Name</td>
+                <td>Is Running?</td>
+                <td></td>
+            </tr>
+            </thead>
+            @foreach (var item in Model.Item2)
+            {
+                    <tr>
+                        <td>@item.Item1</td>
+                        <td>@item.Item2</td>
+                        <td>@item.Item3</td>
+                        <td><input type="checkbox" name="ids" value="@item.Item1" disabled="@(!item.Item3)"/></td>
+                    </tr>
+
+            }
+        </table>
+    </form>
+</div>
+
+<section class="footer">
+    <div class="epi-contentArea">
+        <div class="col-12">
+            <a href="https://www.technicaldogsbody.com/" target="_blank">Developed by Technical Dogsbody</a>
+        </div>
+    </div>
+</section>

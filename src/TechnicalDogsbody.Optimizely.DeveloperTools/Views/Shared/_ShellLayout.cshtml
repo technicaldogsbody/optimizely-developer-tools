@@ -1,0 +1,43 @@
+﻿@using EPiServer.Framework.Web.Resources
+@using EPiServer.Shell
+@using EPiServer.Shell.Navigation
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+    <title>Optimizely Developer Tools</title>
+
+    <!-- Shell -->
+    @Html.Raw(ClientResources.RenderResources("ShellCore"))
+
+    <!-- Light Theme -->
+    @Html.Raw(ClientResources.RenderResources("ShellCoreLightTheme"))
+
+    <style>
+        iframe {
+            height: calc(100vh - 175px);
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid grey;
+        }
+    </style>
+</head>
+<body>
+    @Html.Raw(Html.CreatePlatformNavigationMenu())
+
+    <div id="epi-application" @Html.Raw(Html.ApplyPlatformNavigation())>
+        <div class="epi-contentContainer epi-padding">
+                <noscript>You need to enable JavaScript to run this app.</noscript>
+                @RenderBody()
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    @ClientResources.RenderResources("admin", new[] { ClientResourceType.Script })
+
+    @RenderSection("AdditionalScripts", false)
+</body>
+</html>

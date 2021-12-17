@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+		<Title>Developer Tools for Optimizely by TechnicalDogsbody</Title>
+		<Authors>Andrew Blyth, https://www.technicaldogsbody.com</Authors>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<Copyright>Andrew Blyth, Copyright © 2021</Copyright>
+		<PackageId>TechnicalDogsbody.Optimizely.DeveloperTools</PackageId>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+		<RespoitoryUrl>https://github.com/technicaldogsbody/optimizely-developer-tools</RespoitoryUrl>
+		<PackageProjectUrl>https://github.com/technicaldogsbody/optimizely-developer-tools</PackageProjectUrl>
+		<Description>This library contains a developer tools for your Optimizely project.</Description>
+		<PackageTags>Optimizely Episerver DeveloperTools TechnicalDogsbody Cache ClearCache ScheduledTasks ContentTypes</PackageTags>
+		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+	</PropertyGroup>
+
+
+
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+		<PackageReference Include="Dapper" Version="2.0.90" />
+		<PackageReference Include="EPiServer.CMS.UI.Core" Version="12.0.3" />
+		<PackageReference Include="EPiServer.Framework" Version="12.0.3" />
+		<PackageReference Include="FluentValidation" Version="10.3.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.2.2" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Remove="module.config" />
+		<None Include="module.config">
+			<Pack>true</Pack>
+			<PackagePath>contentFiles\any\any\modules\_protected\TechnicalDogsbody.Optimizely.DeveloperTools</PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include=".\msbuild\CopyModule.targets">
+			<Pack>true</Pack>
+			<PackagePath>build\net5.0\$(MSBuildProjectName).targets</PackagePath>
+		</Content>
+	</ItemGroup>
+</Project>

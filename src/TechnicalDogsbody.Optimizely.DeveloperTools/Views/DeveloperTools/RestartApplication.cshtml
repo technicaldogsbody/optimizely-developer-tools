@@ -1,0 +1,31 @@
+﻿@using Microsoft.AspNetCore.Http.Extensions
+@model bool
+
+@{
+    Layout = "_ShellLayout";
+}
+<div class="epi-contentArea">
+    @if (Model)
+    {
+        <h1>Application Restarted</h1>
+        <h4>Loading the site to finish restarting</h4>
+        <iframe src="@Context.Request.Host"></iframe>
+    }
+    else
+    {
+        <h1>Restart Application?</h1>
+        <h4>*WARNING* This stops the application, load the site in a browser to start it again.</h4>
+        <br /><br />
+        <form method="get">
+            <button type="submit" name="restart" value="true">Restart Application</button>
+        </form>
+    }
+</div>
+<br /><br />
+<section class="footer">
+    <div class="epi-contentArea">
+        <div class="col-12">
+            <a href="https://www.technicaldogsbody.com/" target="_blank">Developed by Technical Dogsbody</a>
+        </div>
+    </div>
+</section>

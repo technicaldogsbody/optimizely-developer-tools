@@ -1,0 +1,44 @@
+﻿@using Microsoft.AspNetCore.Http.Extensions
+@model (bool, List<string>)
+
+@{
+    Layout = "_ShellLayout";
+}
+<div class="epi-contentArea">
+    <h1>Clear Cache</h1>
+    <h4>This will Remove all items from the cache</h4>
+
+    @if (Model.Item1)
+    {
+        <h5>Cache has been cleared</h5>
+    }
+
+    <br /><br />
+    <form method="get">
+        <button type="submit" name="reset" value="true">Clear Cache</button>
+    </form>
+    <br/>
+    <br/>
+    @if (!Model.Item1)
+    {
+        <table>
+            <thead>
+            <tr>
+                <td>Cache Key</td>
+            </tr>
+            </thead>
+            @foreach (var item in Model.Item2)
+            {
+                <tr><td>@item</td></tr>
+            }
+        </table>
+    }
+</div>
+
+<section class="footer">
+    <div class="epi-contentArea">
+        <div class="col-12">
+            <a href="https://www.technicaldogsbody.com/" target="_blank">Developed by Technical Dogsbody</a>
+        </div>
+    </div>
+</section>
