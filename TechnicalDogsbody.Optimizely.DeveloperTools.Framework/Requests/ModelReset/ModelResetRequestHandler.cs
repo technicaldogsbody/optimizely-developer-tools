@@ -11,6 +11,7 @@ using EPiServer;
 using EPiServer.Core;
 using MediatR;
 using TechnicalDogsbody.Optimizely.DeveloperTools.Core.Contracts;
+using TechnicalDogsbody.Optimizely.DeveloperTools.Framework.ViewModels;
 
 namespace TechnicalDogsbody.Optimizely.DeveloperTools.Framework.Requests.ModelReset
 {
@@ -53,7 +54,7 @@ namespace TechnicalDogsbody.Optimizely.DeveloperTools.Framework.Requests.ModelRe
                 var db = _connectionFactory.CreateConnection();
                 var result = await db.QueryAsync<ContentType>(Query);
 
-                if (request.Reset)
+                if (request.Reset && request.Ids != null && request.Ids.Any())
                 {
                     foreach (var record in result.Where(x => request.Ids.Contains(x.Id)))
                     {

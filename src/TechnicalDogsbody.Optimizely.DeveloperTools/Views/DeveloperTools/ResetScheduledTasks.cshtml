@@ -1,4 +1,4 @@
-﻿@model (bool, IEnumerable<(Guid, string, bool)>)
+﻿@model TechnicalDogsbody.Optimizely.DeveloperTools.Framework.Requests.ResetScheduledTasks.ResetScheduledTasksResponse
 
 @{
     Layout = "_ShellLayout";
@@ -9,7 +9,7 @@
     <h4>This will stop any stuck scheduled tasks (note: this only updates the database, it doesn't kill any processes).</h4>
 
 
-    @if (Model.Item1)
+    @if (Model.Reset)
     {
             <br />
 
@@ -32,13 +32,13 @@
                 <td></td>
             </tr>
             </thead>
-            @foreach (var item in Model.Item2)
+            @foreach (var item in Model.Tasks)
             {
                     <tr>
-                        <td>@item.Item1</td>
-                        <td>@item.Item2</td>
-                        <td>@item.Item3</td>
-                        <td><input type="checkbox" name="ids" value="@item.Item1" disabled="@(!item.Item3)"/></td>
+                        <td>@item.Id</td>
+                        <td>@item.Name</td>
+                        <td>@item.IsRunning</td>
+                        <td><input type="checkbox" name="ids" value="@item.Id" disabled="@(!item.IsRunning)"/></td>
                     </tr>
 
             }

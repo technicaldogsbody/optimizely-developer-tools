@@ -1,4 +1,4 @@
-﻿@model (bool, List<string>)
+﻿@model TechnicalDogsbody.Optimizely.DeveloperTools.Framework.Requests.ClearCache.ClearCacheResponse
 
 @{
     Layout = "_ShellLayout";
@@ -7,7 +7,7 @@
     <h1>Clear Cache</h1>
     <h4>This will Remove all items from the cache</h4>
 
-    @if (Model.Item1)
+    @if (Model.Reset)
     {
         <h5>Cache has been cleared</h5>
     }
@@ -18,18 +18,15 @@
     </form>
     <br/>
     <br/>
-    @if (!Model.Item1)
-    {
         <table>
             <thead>
             <tr>
                 <td>Cache Key</td>
             </tr>
             </thead>
-            @foreach (var item in Model.Item2)
+            @foreach (var item in Model.Keys)
             {
                 <tr><td>@item</td></tr>
             }
         </table>
-    }
 </div>

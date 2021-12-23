@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TechnicalDogsbody.Optimizely.DeveloperTools.Framework.ViewModels;
 
 namespace TechnicalDogsbody.Optimizely.DeveloperTools.Framework.Requests.ModelReset
 {
@@ -11,12 +12,5 @@ namespace TechnicalDogsbody.Optimizely.DeveloperTools.Framework.Requests.ModelRe
         public bool Reset { get; internal init; }
         public string Version { get; internal init; }
         public IEnumerable<ContentType> ContentTypes { get; internal init; }
-    }
-
-    public record ContentType
-    {
-        public int Id { get; internal init; }
-        public string Name { get; internal init; }
-        public string ModelType { get; internal init; }
     }
 }

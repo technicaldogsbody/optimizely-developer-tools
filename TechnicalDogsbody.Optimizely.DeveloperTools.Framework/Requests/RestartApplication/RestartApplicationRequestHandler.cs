@@ -15,14 +15,14 @@ using TechnicalDogsbody.Optimizely.DeveloperTools.Core.Contracts;
 
 namespace TechnicalDogsbody.Optimizely.DeveloperTools.Framework.Requests.ModelReset
 {
-    public class RestartApplicationRequestHandler : IRequestHandler<ModelResetRequest, bool>
+    public class RestartApplicationRequestHandler : IRequestHandler<RestartApplicationRequest, bool>
     {
-        private readonly IDeveloperToolsLogger<ModelResetRequestHandler> _logger;
+        private readonly IDeveloperToolsLogger<RestartApplicationRequestHandler> _logger;
         private readonly IHostApplicationLifetime _applicationLifetime;
 
 
         public RestartApplicationRequestHandler(
-            IDeveloperToolsLogger<ModelResetRequestHandler> logger,
+            IDeveloperToolsLogger<RestartApplicationRequestHandler> logger,
             IHostApplicationLifetime applicationLifetime)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -42,14 +42,14 @@ namespace TechnicalDogsbody.Optimizely.DeveloperTools.Framework.Requests.ModelRe
                 _logger.LogDebug(nameof(Handle),
                     "Completed - Time: {sw.ElapsedMilliseconds}ms, Response: true", sw.ElapsedMilliseconds);
 
-                return true;
+                return await Task.FromResult(true);
             }
             else
             {
                 _logger.LogDebug(nameof(Handle),
                     "Completed - Time: {sw.ElapsedMilliseconds}ms, Response: false", sw.ElapsedMilliseconds);
 
-                return false;
+                return await Task.FromResult(false);
             }
         }
     }

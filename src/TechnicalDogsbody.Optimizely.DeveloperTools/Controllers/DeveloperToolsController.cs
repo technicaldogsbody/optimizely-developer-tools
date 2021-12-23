@@ -16,80 +16,65 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Hosting;
 using TechnicalDogsbody.Optimizely.DeveloperTools.Core.Contracts;
+using TechnicalDogsbody.Optimizely.DeveloperTools.Framework.Requests.ClearCache;
 using TechnicalDogsbody.Optimizely.DeveloperTools.Framework.Requests.ModelReset;
+using TechnicalDogsbody.Optimizely.DeveloperTools.Framework.Requests.ResetScheduledTasks;
 using IApplicationLifetime = Microsoft.AspNetCore.Hosting.IApplicationLifetime;
 
 namespace TechnicalDogsbody.Optimizely.DeveloperTools.Controllers
 {
+    /// <summary>
+    /// Controller for the developer tools
+    /// </summary>
     public class DeveloperToolsController : Controller
     {
         private readonly IMediator _mediator;
-        private readonly IDbConnectionFactory _connectionFactory;
-        private readonly IMemoryCache _memoryCache;
 
-        public DeveloperToolsController(IMediator mediator, IDbConnectionFactory connectionFactory, IMemoryCache memoryCache)
-        {
-            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-            _connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
-            _memoryCache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
-        }
+        /// <summary>
+        /// Controller for the developer tools
+        /// </summary>
+        /// <param name="mediator">Mediatr IMediator</param>
+        /// <exception cref="ArgumentNullException">Exception if IMediator is null</exception>
+        public DeveloperToolsController(IMediator mediator) => _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 
+        /// <summary>
+        /// Summary Page
+        /// </summary>
+        /// <returns>Nothing</returns>
         [Authorize(Roles = "Developers")]
-        public ActionResult Index()
-        {
-            return View();
-        }
+        public ActionResult Index() => View();
 
+        /// <summary>
+        /// Resets versions of the ContentTypes
+        /// </summary>
+        /// <param name="request">Model Reset Request</param>
+        /// <returns>Model Reset Response</returns>
         [Authorize(Roles = "Developers")]
-        public async Task<ActionResult<ModelResetResponse>> ModelReset(bool reset, IEnumerable<int> ids)
-        {
-            var response = await _mediator.Send(new ModelResetRequest { Reset = reset, Ids = ids });
+        public async Task<ActionResult<ModelResetResponse>> ModelReset(ModelResetRequest request) => View(await _mediator.Send(request));
 
-            return View(response);
-        }
-
+        /// <summary>
+        /// Resets the Application
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [Authorize(Roles = "Developers")]
-        public async Task<ActionResult<bool>> RestartApplication(bool restart)
-        {
-            return await _mediator.Send(new RestartApplicationRequest { Restart = restart });
-        }
+        public async Task<ActionResult<bool>> RestartApplication(RestartApplicationRequest request) => View(await _mediator.Send(request));
 
+
+        /// <summary>
+        /// Clears the In Memory cache
+        /// </summary>
+        /// <param name="request">Cache Clear Request</param>
+        /// <returns>Cache Clear Response</returns>
         [Authorize(Roles = "Developers")]
-        public ActionResult<List<string>> ClearCache(bool reset)
-        {
-            var cachedEntries = _memoryCache.GetKeys().Cast<string>().OrderBy(x => x).ToList();
+        public async Task<ActionResult<ClearCacheResponse>> ClearCache(ClearCacheRequest request) => View(await _mediator.Send(request));
 
-            if (reset)
-            {
-                foreach (var entry in cachedEntries)
-                {
-                    _memoryCache.Remove(entry.ToString());
-                }
-            }
-
-            return View((reset, cachedEntries));
-        }
-
+        /// <summary>
+        /// Reset Scheduled Tasks
+        /// </summary>
+        /// <param name="request">Reset Scheduled Tasks Request</param>
+        /// <returns>Reset Scheduled Tasks Response</returns>
         [Authorize(Roles = "Developers")]
-        public async Task<ActionResult<IEnumerable<(Guid, string, bool)>>> ResetScheduledTasks(bool reset, IEnumerable<Guid> ids)
-        {
-            var query =
-                "SELECT [pkID],[Name],[IsRunning] FROM [tblScheduledItem] ORDER BY [Name]";
-            var db = _connectionFactory.CreateConnection();
-            var result = await db.QueryAsync<(Guid, string, bool)>(query);
-
-            if (reset)
-            {
-                foreach (var record in result.Where(x => ids.Contains(x.Item1)))
-                {
-                    await db.ExecuteAsync(
-                        $"Update [tblScheduledItem] Set [IsRunning] = 0 WHERE [pkId] = '{record.Item1}'");
-                }
-            }
-
-            result = await db.QueryAsync<(Guid, string, bool)>(query);
-
-            return View((reset, result));
-        }
+        public async Task<ActionResult<ResetScheduledTasksResponse>> ResetScheduledTasks(ResetScheduledTasksRequest request) => View(await _mediator.Send(request));
     }
 }
