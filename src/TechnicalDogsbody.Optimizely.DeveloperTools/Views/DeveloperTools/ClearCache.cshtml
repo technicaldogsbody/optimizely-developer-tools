@@ -9,7 +9,7 @@
 
     @if (Model.Reset)
     {
-        <h5>Cache has been cleared</h5>
+            <h5>Cache has been cleared</h5>
     }
 
     <br /><br />
@@ -24,9 +24,9 @@
                 <td>Cache Key</td>
             </tr>
             </thead>
-            @foreach (var item in Model.Keys)
-            {
-                <tr><td>@item</td></tr>
-            }
+        @foreach (var item in Model.Keys)
+        {
+                    <tr><td>@item</td></tr>
+        }
         </table>
 </div>
