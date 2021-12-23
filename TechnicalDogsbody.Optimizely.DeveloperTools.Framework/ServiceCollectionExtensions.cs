@@ -1,20 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 using EPiServer.Cms.Shell;
-using EPiServer.Security;
 using EPiServer.Shell.Modules;
 using FluentValidation;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using TechnicalDogsbody.Optimizely.DeveloperTools.Configuration;
-using TechnicalDogsbody.Optimizely.DeveloperTools.Contracts;
-using TechnicalDogsbody.Optimizely.DeveloperTools.Factories;
-using TechnicalDogsbody.Optimizely.DeveloperTools.Providers;
-using TechnicalDogsbody.Optimizely.DeveloperTools.Validators;
+using TechnicalDogsbody.Optimizely.DeveloperTools.Core;
+using TechnicalDogsbody.Optimizely.DeveloperTools.Core.Contracts;
+using TechnicalDogsbody.Optimizely.DeveloperTools.Framework.Configuration;
+using TechnicalDogsbody.Optimizely.DeveloperTools.Framework.Factories;
+using TechnicalDogsbody.Optimizely.DeveloperTools.Framework.Validators;
 
-namespace TechnicalDogsbody.Optimizely.DeveloperTools
+namespace TechnicalDogsbody.Optimizely.DeveloperTools.Framework
 {
     public static class ServiceCollectionExtensions
     {
@@ -23,6 +21,9 @@ namespace TechnicalDogsbody.Optimizely.DeveloperTools
             Action<ConfigurationContext> setup)
         {
             if (setup == null) throw new ArgumentNullException(nameof(setup));
+
+            services.AddTransient(typeof(IDeveloperToolsLogger<>), typeof(DeveloperToolsLogger<>));
+            services.AddMediatR(Assembly.GetAssembly(typeof(ServiceCollectionExtensions)));
 
             var context = new ConfigurationContext();
             setup.Invoke(context);

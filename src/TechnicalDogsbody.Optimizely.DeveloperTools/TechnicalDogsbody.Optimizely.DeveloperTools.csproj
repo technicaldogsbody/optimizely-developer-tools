@@ -28,7 +28,7 @@
 		<PackageReference Include="Dapper" Version="2.0.90" />
 		<PackageReference Include="EPiServer.CMS.UI.Core" Version="12.0.3" />
 		<PackageReference Include="EPiServer.Framework" Version="12.0.3" />
-		<PackageReference Include="FluentValidation" Version="10.3.4" />
+		<PackageReference Include="MediatR" Version="9.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.2.2" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
 	</ItemGroup>
@@ -46,5 +46,10 @@
 			<Pack>true</Pack>
 			<PackagePath>build\net5.0\$(MSBuildProjectName).targets</PackagePath>
 		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\TechnicalDogsbody.Optimizely.DeveloperTools.Core\TechnicalDogsbody.Optimizely.DeveloperTools.Core.csproj" />
+	  <ProjectReference Include="..\..\TechnicalDogsbody.Optimizely.DeveloperTools.Framework\TechnicalDogsbody.Optimizely.DeveloperTools.Framework.csproj" />
 	</ItemGroup>
 </Project>

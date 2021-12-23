@@ -5,38 +5,32 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using Dapper;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.Framework.Cache;
-using EPiServer.Licensing.RestrictionTypes;
 using EPiServer.Shell.Navigation;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Hosting;
-using TechnicalDogsbody.Optimizely.DeveloperTools.Contracts;
+using TechnicalDogsbody.Optimizely.DeveloperTools.Core.Contracts;
+using TechnicalDogsbody.Optimizely.DeveloperTools.Framework.Requests.ModelReset;
 using IApplicationLifetime = Microsoft.AspNetCore.Hosting.IApplicationLifetime;
 
 namespace TechnicalDogsbody.Optimizely.DeveloperTools.Controllers
 {
     public class DeveloperToolsController : Controller
     {
-        private readonly IHostApplicationLifetime _applicationLifetime;
-        private readonly IContentLoader _contentLoader;
+        private readonly IMediator _mediator;
         private readonly IDbConnectionFactory _connectionFactory;
-        private readonly ISynchronizedObjectInstanceCache _synchronizedObjectInstanceCache;
         private readonly IMemoryCache _memoryCache;
 
-        public DeveloperToolsController(IHostApplicationLifetime applicationLifetime,
-            IContentLoader contentLoader, IDbConnectionFactory connectionFactory,
-            ISynchronizedObjectInstanceCache synchronizedObjectInstanceCache, IMemoryCache memoryCache)
+        public DeveloperToolsController(IMediator mediator, IDbConnectionFactory connectionFactory, IMemoryCache memoryCache)
         {
-            _applicationLifetime = applicationLifetime ?? throw new ArgumentNullException(nameof(applicationLifetime));
-            _contentLoader = contentLoader ?? throw new ArgumentNullException(nameof(contentLoader));
+            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             _connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
-            _synchronizedObjectInstanceCache = synchronizedObjectInstanceCache ?? throw new ArgumentNullException(nameof(synchronizedObjectInstanceCache));
             _memoryCache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
         }
 
@@ -47,45 +41,17 @@ namespace TechnicalDogsbody.Optimizely.DeveloperTools.Controllers
         }
 
         [Authorize(Roles = "Developers")]
-        public async Task<ActionResult<(string, IEnumerable<(int, string, string)>)>> ModelReset(bool reset, IEnumerable<int> ids)
+        public async Task<ActionResult<ModelResetResponse>> ModelReset(bool reset, IEnumerable<int> ids)
         {
-            var startPage = _contentLoader.Get<IContentData>(ContentReference.StartPage);
-            var startPageType = startPage.GetType();
+            var response = await _mediator.Send(new ModelResetRequest { Reset = reset, Ids = ids });
 
-            var version = System.Diagnostics.FileVersionInfo.GetVersionInfo(startPageType.BaseType?.Assembly.Location);
-            var query =
-                "SELECT [pkId], [Name], [ModelType] FROM [tblContentType] WHERE PATINDEX('%Version=%.%', [ModelType]) > 1";
-            var db = _connectionFactory.CreateConnection();
-            var result = await db.QueryAsync<(int, string, string)>(query);
-
-            if (reset)
-            {
-                foreach (var record in result.Where(x => ids.Contains(x.Item1)))
-                {
-                    var currentVersion = Regex.Match(record.Item3, @"Version=\d+.\d+.\d+.\d+");
-                    await db.ExecuteAsync(
-                        $"Update [tblContentType] Set [ModelType] = REPLACE(ModelType, '{currentVersion}', 'Version={version.FileVersion}') WHERE [pkId] = {record.Item1}");
-                }
-            }
-
-            result = await db.QueryAsync<(int, string, string)>(query);
-
-            return View((!reset, version.FileVersion, result));
+            return View(response);
         }
 
         [Authorize(Roles = "Developers")]
-        public ActionResult<bool> RestartApplication(bool restart)
+        public async Task<ActionResult<bool>> RestartApplication(bool restart)
         {
-            if (restart)
-            {
-                _applicationLifetime.StopApplication();
-
-                return View(true);
-            }
-            else
-            {
-                return View(false);
-            }
+            return await _mediator.Send(new RestartApplicationRequest { Restart = restart });
         }
 
         [Authorize(Roles = "Developers")]

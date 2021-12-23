@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace TechnicalDogsbody.Optimizely.DeveloperTools.Contracts
+namespace TechnicalDogsbody.Optimizely.DeveloperTools.Core.Contracts
 {
     public interface IDbConnectionFactory
     {

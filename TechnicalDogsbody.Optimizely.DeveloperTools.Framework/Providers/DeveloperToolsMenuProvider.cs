@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using EPiServer.Shell;
 using EPiServer.Shell.Navigation;
-using TechnicalDogsbody.Optimizely.DeveloperTools.Configuration;
+using TechnicalDogsbody.Optimizely.DeveloperTools.Framework.Configuration;
 
-namespace TechnicalDogsbody.Optimizely.DeveloperTools.Providers
+namespace TechnicalDogsbody.Optimizely.DeveloperTools.Framework.Providers
 {
     [MenuProvider]
     public class DeveloperToolsMenuProvider : IMenuProvider

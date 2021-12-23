@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EPiServer.Security;
-using Microsoft.Identity.Client;
+﻿using EPiServer.Security;
 
-namespace TechnicalDogsbody.Optimizely.DeveloperTools.Configuration
+namespace TechnicalDogsbody.Optimizely.DeveloperTools.Framework.Configuration
 {
     public record ConfigurationContext
     {

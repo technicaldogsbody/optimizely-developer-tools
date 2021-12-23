@@ -1,15 +1,14 @@
-﻿@using Microsoft.AspNetCore.Http.Extensions
-@model (bool, string, IEnumerable<(int, string, string)>)
+﻿@model TechnicalDogsbody.Optimizely.DeveloperTools.Framework.Requests.ModelReset.ModelResetResponse
 
 @{
     Layout = "_ShellLayout";
 }
 <div class="epi-contentArea">
     <h1>Model Version Reset</h1>
-    <h4>This will reset all the Model/Content Type versions to @Model.Item2 based on the Start Page version</h4>
+    <h4>This will reset all the Model/Content Type versions to @Model.Version based on the Start Page version</h4>
 
 
-    @if (Model.Item1)
+    @if (Model.Reset)
     {
         <h5>Update is complete, please restart the web application for this to take effect.</h5>
     }
@@ -28,24 +27,16 @@
             <td></td>
         </tr>
         </thead>
-        @foreach (var item in Model.Item3)
+        @foreach (var item in Model.ContentTypes)
         {
-            var version = item.Item3.Split(", ", StringSplitOptions.RemoveEmptyEntries).FirstOrDefault(x => x.StartsWith("Version="))?.Split('=').Last();
+            var version = item.ModelType.Split(", ", StringSplitOptions.RemoveEmptyEntries).FirstOrDefault(x => x.StartsWith("Version="))?.Split('=').Last();
             <tr>
-                <td>@item.Item1</td>
-                <td>@item.Item2</td>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
                 <td>@version</td>
-                <td><input type="checkbox" name="ids" value="@item.Item1" disabled="@(version?.Equals(Model.Item2))"/></td>
+                <td><input type="checkbox" name="ids" value="@item.Id" disabled="@(version?.Equals(Model.Version))"/></td>
             </tr>
         }
     </table>
     </form>
 </div>
-
-<section class="footer">
-    <div class="epi-contentArea">
-        <div class="col-12">
-            <a href="https://www.technicaldogsbody.com/" target="_blank">Developed by Technical Dogsbody</a>
-        </div>
-    </div>
-</section>

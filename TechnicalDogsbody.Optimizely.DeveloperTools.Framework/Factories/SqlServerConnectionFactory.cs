@@ -1,8 +1,8 @@
 ﻿using System.Data;
 using Microsoft.Data.SqlClient;
-using TechnicalDogsbody.Optimizely.DeveloperTools.Contracts;
+using TechnicalDogsbody.Optimizely.DeveloperTools.Core.Contracts;
 
-namespace TechnicalDogsbody.Optimizely.DeveloperTools.Factories
+namespace TechnicalDogsbody.Optimizely.DeveloperTools.Framework.Factories
 {
     public class SqlServerConnectionFactory : IDbConnectionFactory
     {

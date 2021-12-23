@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.IO;
 using TechnicalDogsbody.Optimizely.DeveloperTools;
+using TechnicalDogsbody.Optimizely.DeveloperTools.Framework;
 
 namespace EPiServer.Templates.Alloy.Mvc
 {
